@@ -1,1 +1,37 @@
-
+useradd -c ‘Glassfish Server User’ glassfish
+passwd glassfish
+su glassfish
+cd /home/glassfish
+wget  http://download.java.net/glassfish/4.1.2/release/glassfish-4.1.2.zip
+unzip glassfish-4.1.2.zip
+exit
+emacs /etc/systemd/system/glassfish.service
+populate file with:
+[Unit]
+Description = Glassfish Server v4.1
+After = syslog.target network.target
+[Service]
+User=glassfish
+ExecStart = /usr/bin/java -jar /home/glassfish/glassfish4/glassfish/lib/client/appserver-cli.jar start-domain
+ExecStop = /usr/bin/java -jar /home/glassfish/glassfish4/glassfish/lib/client/appserver-cli.jar stop-domain
+ExecReload = /usr/bin/java -jar /home/glassfish/glassfish4/glassfish/lib/client/appserver-cli.jar restart-domain
+Type = forking
+[Install]
+WantedBy = multi-user.target
+Change port so that it can start successfully
+cd /home/<username>/glassfish-X/glassfish/domains/domain1/config
+emacs domain.xml
+<network-listener port="8080" protocol="http-listener-1" transport="tcp" name="http-lis
+Check the status of glassfish, should be connected but inactive. Start it and enable at boot. 
+systemctl status glassfish
+systemctl start glassfish
+systemctl status glassfish
+systemctl enable glassfish
+reboot now
+Enable DAS access so that you may log into the admin portal 4848
+./asadmin start-domain
+./asadmin change-admin-password
+If you’ve never entered a password you are able to skip the first two questions. 
+./asadmin enable-secure-admin
+./asadmin stop-domain
+./asadmin start-domain	
