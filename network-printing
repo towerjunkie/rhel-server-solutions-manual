@@ -1,0 +1,14 @@
+yum install cups
+yum install ghostscript.x86_64 hplip-common.x86_64
+service cups start
+chkconfig cups on
+emacs /etc/cups/cupsd.conf
+Add the following line above the conf file:
+DefaultEncryption Never
+Add 192.168.56.102/631 under only listen for connections from the local machine.
+Add 192.168.56.102 under restrict access to the server.
+Add 192.168.56.102 under restrict access to admin page.
+service cups restart
+install HP (or whatever pacakge)
+yum install hplip
+go to 192.168.56.102:631 and configure network printer. 
