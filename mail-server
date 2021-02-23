@@ -1,0 +1,37 @@
+Check if you have sendmail and postfix installed
+Rpm -qa | grep sendmail
+Rpm -qa | grep postfix
+Yum -y install sendmail
+Yum -y install sendmail-cf
+Now open the sendmail.mc config file and add dnl to the start of a line called 
+Emacs /etc/mail/sendmail.mc
+DAEMON_OPTIONS(Port=smtp, Addr=127.0.0.1, name=MTA’)dnl
+Add the hostname
+Emacs /etc/mail/local-host-names
+Add hostname of email server under the first line. I added localhost.com
+Create a new mail user.
+Useradd mailUser
+Service sendmail restart
+Chkconfig sendmail on
+Send a test email.
+mail -v -s "Test Mail" mailUser@localhost.localdomain.com
+now check if the email you sent is there.
+su - mailUser
+mail
+open mail you just sent. 
+check mail log to see email successfully sent. 
+tail /var/log/maillog
+Check to see if you have dovecot installed and install it
+rpm -qa | grep dovecot
+yum -y install 
+configure the 10-auth-conf file. Remove the comment from disable_plaint text and change the yes to a no. 
+emacs /etc/dovecot/conf.d/10-auth.conf
+configure the 10-mail-conf file. Remove the comment from the second “mail_location”.
+emacs /etc/dovecot/conf.d/10-mail.conf
+service dovecot restart
+add the IP that you want to allow to the /etc/mail/access file. Add your IP and add the word relay at the end. 
+emacs /etc/mail/access
+m4 /etc/mail/sendmail.mc > /etc/mail/sendmail.cf
+service sendmail restart 
+add account on outlook an you’re done. 
+yum -y install spamassasin
