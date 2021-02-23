@@ -1,0 +1,38 @@
+Install samba and necessary packages
+sudo yum install samba samba-common samba-client
+Open windows CMD and use command net config workstation to confirm an existing workstation. 
+Make a copy of the conf file just in case. 
+mv /etc/samba/smb.conf /etc/samba/smb.con.bak
+mkdir -p /srv/samba/shared
+chmod -R 0755 /srv/samba/shared
+chown -R nobody:nobody /srv/samba/shared
+chcon -t samba_share_t /srv/samba/shared
+Create the new conf file and add the following:
+emacs /etc/samba/smb.conf
+[global]
+workgroup = WORKGROUP
+server string = Samba Server %v
+netbios name = centos-8
+security = user
+map to guest = bad user
+dns proxy = no
+
+[Anonymous]
+path = /srv/samba/shared
+browsable =yes
+writable = yes
+guest ok = yes
+read only = no
+Test to see if everything is in order. 
+Testparm
+firewall-cmd --add-service=samba --zone=public --permanent
+firewall-cmd --reload
+systemctl start smb
+systemctl enable smb
+systemctl status smb
+systemctl start nmb
+systemctl enable nmb
+systemctl status nmb
+Go to windows again and hit the windows key + R. Write in the title we put with \\ before. 
+\\centos-8 
+You should be seeing the anonymous folder. Try going to /srv/samba/shared folder and put some files in there and see if they show up.
