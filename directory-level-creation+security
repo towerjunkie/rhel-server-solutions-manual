@@ -50,3 +50,19 @@ visudo
 # %wheel        ALL=(ALL)       ALL
 Add user to group usermod –aG wheel UserName
 
+To add enable apache web server to enable requests tied to a user’s public_html directory, first enable apache userdirs in the etc/httpd/conf.d/userdir.conf. 
+Do this by switching the lines from disabled to enabled.
+
+UserDir enabled profe
+
+Restart Apache server for changes to take place by using command service httpd restart.
+
+Create a public_html directory for profe to use. Mkdir /home/profe/public_html.
+
+Alter permissions  on the user home and public_html directories.
+chmod 711 /home/profe
+chown profe:profe /home/profe/public_html
+chmod 755 /home/profe/public_html
+Set correct SELinux context for apache homdir.
+setsebool -P httpd_enable_homedirs true
+chcon -R -t httpd_sys_content_t /home/profe/public_html
