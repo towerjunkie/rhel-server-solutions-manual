@@ -1,0 +1,18 @@
+To install webmin
+Create new Webmin repo and enter the following text into it.
+sudo vi /etc/yum.repos.d/webmin.repo
+[Webmin]
+name=Webmin Distribution Neutral
+#baseurl=http://download.webmin.com/download/yum
+mirrorlist=http://download.webmin.com/download/yum/mirrorlist
+enabled=1
+Add the Webmin author’s PGP key so that your system will trust the new repository:
+wget http://www.webmin.com/jcameron-key.asc
+sudo rpm --import jcameron-key.asc
+Install webmin
+sudo yum install webmin
+Open the ports needed for webmin and the firewall, restart the firewall. 
+firewall-cmd --permanent --zone=public --add-port=10000/tcp
+firewall-cmd --reload
+systemctl start firewalld
+Log into webmin and add webmin1 user for admin purposes. 
