@@ -23,3 +23,19 @@ Restart apache server with service httpd restart.
 
 Edit /etc/passwd and add the following line (make sure there isn’t another account number 600) (user name):x:600:600:(user name):/home/profe:/bin/bash
 Edit /etc/shadow and add the following line (this must be exactly the same) (user name):x:600:
+
+Create user level directory, restrict user permissions to that directory. 
+
+Manually create the profe home directory with the command mkdir /home/profe
+
+Change ownership and permissions access of the newly created directory:
+
+chown profe /home/profe
+chgrp profe /home/profe
+chmod u=rwx /home/profe
+
+Copy the following login files from root's home directory, change
+file's ownership:
+
+cp ~root/.bashrc /home/profe
+chown profe.profe /home/profe/.bashrc
