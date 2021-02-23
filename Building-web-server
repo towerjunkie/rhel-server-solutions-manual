@@ -20,6 +20,7 @@ sudo firewall-cmd --list-all to check all allowed services.
 sudo firewall-cmd --add-service=http --permanent to add httpd service to your firewall.
 sudo firewall-cmd --add-service=https --permanent to add secured http.
 sudo firewall-cmd --reload to reload your firewall
+
 Once everything was in place, I created the index file under the var/www/html folder for apache.
-Was able to successfully log into the website externally through ip 192.168.56.103.
+
 
