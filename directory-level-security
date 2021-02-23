@@ -1,4 +1,4 @@
-Edit the apache config file
+<strong>Edit the apache config file</strong>
 
 sudo emacs /etc/httpd/conf/httpd.conf
 
@@ -39,3 +39,15 @@ file's ownership:
 
 cp ~root/.bashrc /home/profe
 chown profe.profe /home/profe/.bashrc
+
+Add user to group of sudoers
+
+To add users to sudoers.
+
+visudo
+
+(remove the # from second line wheel)
+## Allows people in group wheel to run all commands
+# %wheel        ALL=(ALL)       ALL
+Add user to group usermod –aG wheel UserName
+
