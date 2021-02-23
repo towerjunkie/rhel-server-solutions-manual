@@ -1,0 +1,13 @@
+Download and set up FTP and VSFTPD
+rpm -q vsftpd
+yum install vsftpd
+yum install ftp
+ Open the /etc/vsftpd/vsftpd.conf file and uncomment the LOCAL_ENABLE=YES to allow nonroot accounts (profe).
+Enable anonymous_enable=YES
+Add non_anon_password=YES under the anonymous_enable and also add
+anon_root=/var/ftp/pub/anon
+service vsftpd start
+service vsftpd restart
+Uncomment chroot_local_user=YES and chroot_list_enable and chroot_list_file
+To test ftp connection use command sftp musixworld@192.168.56.103
+You should be in the home directory and should not be able to go to the ~ directory.
