@@ -1,0 +1,12 @@
+Sudo update everything first
+
+Yum install httpd
+Yum install mysql
+
+Create index.html file and store it in /var/www/html/index.html
+
+sudo systemctl status httpd to check if apache is running
+sudo systemctl start httpd to start apache; To restart type restart. Must do this every time a change is done. 
+sudo systemctl enable httpd to start apache at boot
+
+Changed permissions on the www folder to 777 so I was able to upload any media to website. 
