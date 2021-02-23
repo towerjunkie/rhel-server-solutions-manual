@@ -10,3 +10,16 @@ sudo systemctl start httpd to start apache; To restart type restart. Must do thi
 sudo systemctl enable httpd to start apache at boot
 
 Changed permissions on the www folder to 777 so I was able to upload any media to website. 
+
+Allow apache (http) through your firewall. 
+
+ip a to check the IP of centos.
+nmap -sT [IP ADDRESS HERE] to check open ports. 
+	yum install nmap if you don’t already have nmap
+sudo firewall-cmd --list-all to check all allowed services.
+sudo firewall-cmd --add-service=http --permanent to add httpd service to your firewall.
+sudo firewall-cmd --add-service=https --permanent to add secured http.
+sudo firewall-cmd --reload to reload your firewall
+Once everything was in place, I created the index file under the var/www/html folder for apache.
+Was able to successfully log into the website externally through ip 192.168.56.103.
+
