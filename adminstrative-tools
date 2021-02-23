@@ -16,3 +16,17 @@ firewall-cmd --permanent --zone=public --add-port=10000/tcp
 firewall-cmd --reload
 systemctl start firewalld
 Log into webmin and add webmin1 user for admin purposes. 
+
+To add Webmin to the wheel group and give sudo privileges:
+adduser UserName
+passwd UserName
+visudo
+Change 
+## Allows people in group wheel to run all commands
+# %wheel        ALL=(ALL)       ALL
+to 
+%wheel        ALL=(ALL)       ALL
+add a user to the wheel group:
+usermod –aG wheel UserName
+
+
