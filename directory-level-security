@@ -1,4 +1,4 @@
-<strong>Edit the apache config file</strong>
+Edit the apache config file
 
 sudo emacs /etc/httpd/conf/httpd.conf
 
