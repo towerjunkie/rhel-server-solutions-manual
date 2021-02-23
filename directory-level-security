@@ -45,7 +45,6 @@ Add user to group of sudoers
 To add users to sudoers.
 
 visudo
-
 (remove the # from second line wheel)
 ## Allows people in group wheel to run all commands
 # %wheel        ALL=(ALL)       ALL
