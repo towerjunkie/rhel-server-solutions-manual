@@ -1,0 +1,17 @@
+yum install epel-release -y
+yum update -y
+shutdown -r now
+yum install lynis -y
+wget http://sable.madmimi.com/c/6938?id=44150.2674.1.a12c46882ca668ab69e63acbe670c747 -O  lynis-community-plugins.tar.gz
+tar -zxvf lynis-community-plugins.tar.gz --strip-components=1 -C /usr/share/lynis/plugins
+chown root:root /usr/share/lynis/plugins/plugin_*
+chmod 600 /usr/share/lynis/plugins/plugin_*
+Check for the plugins you’ve installed by using the grep command. 
+grep plugin= /etc/lynis/default.prf
+To use Lynis
+lynis
+lynis audit system
+Sort out the log warning by using command 
+grep Warning /var/log/lynis.log
+You can display all Suggestion messages using another grep command
+grep Suggestion /var/log/lynis.log
