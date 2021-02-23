@@ -1,0 +1,25 @@
+Edit the apache config file
+
+sudo emacs /etc/httpd/conf/httpd.conf
+
+Find the section that begins with <Directory "/var/www/html">. Change the line from AllowOverride none to AllowOverride AuthConfig
+
+Let's begin by creating a .htpasswd file for user1.
+
+sudo htpasswd -c /etc/httpd/.htpasswd user1
+sudo chown apache:apache /etc/httpd/.htpasswd
+sudo chmod 0660 /etc/httpd/.htpasswd
+
+Create a .htaccess file in the directory you wish to restrict.
+
+sudo emacs /var/www/html/.htaccess
+add the following content:
+AuthType Basic
+AuthName "Restricted Content"
+AuthUserFile /etc/httpd/.htpasswd
+Require valid-user
+
+Restart apache server with service httpd restart.
+
+Edit /etc/passwd and add the following line (make sure there isn’t another account number 600) (user name):x:600:600:(user name):/home/profe:/bin/bash
+Edit /etc/shadow and add the following line (this must be exactly the same) (user name):x:600:
