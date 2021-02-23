@@ -1,0 +1,30 @@
+In order to install rdesktop (Remote Desktop Protocol) I first opened port 3389 on the firewall. 
+firewall-cmd --permanent --zone=public --add-port=3389/tcp
+firewall-cmd --reload
+systemctl start firewalld
+install rdesktop – because centos and RHEL do not include rdesktop I had to get it from another directory online. 
+sudo rpm --import http://li.nux.ro/download/nux/RPM-GPG-KEY-nux.ro 
+sudo rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-1.el7.nux.noarch.rpm    
+sudo yum install rdesktop
+Now I went to the target windows machine and enabled remote desktop usage.
+Now to connect to the windows machine use command:
+rdesktop -u (username) (hostname)
+To check what version of rdeskptop installed to confirm:
+rdesktop 2>&1| grep Version
+
+
+To install xrdp from the EPEL repo:
+rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+yum -y install xrdp tigervnc-server
+systemctl start xrdp
+xrdp should now be listening on 3389. You can confirm this by using:
+netstat -antup | grep xrdp
+Now in order to get xrdp to run at start up use the command:
+systemctl enable xrdp
+Finally, adjust your firewall settings to allow that port.
+firewall-cmd --permanent --add-port=3389/tcp
+firewall-cmd --reload
+Configure SElinux
+chcon --type=bin_t /usr/sbin/xrdp
+chcon --type=bin_t /usr/sbin/xrdp-sesman
+And to test the utility open your remote desktop app on windows, verify your root identity and accept the discrepancies of the certificate and you’re in.
