@@ -1,0 +1,50 @@
+yum install epel-release
+yum update -y && sudo reboot
+yum install java-1.8.0-openjdk.x86_64
+Create a user for tomcat
+groupadd tomcat
+mkdir /opt/tomcat
+useradd -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
+wget http://www-us.apache.org/dist/tomcat/tomcat-8/v8.0.33/bin/apache-tomcat-8.0.33.tar.gz
+tar -zxvf apache-tomcat-8.0.33.tar.gz -C /opt/tomcat --strip-components=1
+Set up permissions
+cd /opt/tomcat
+sudo chgrp -R tomcat conf
+sudo chmod g+rwx conf
+sudo chmod g+r conf/*
+sudo chown -R tomcat logs/ temp/ webapps/ work/
+sudo chgrp -R tomcat bin
+sudo chgrp -R tomcat lib
+sudo chmod g+rwx bin
+sudo chmod g+r bin/*
+setup a Systemd unit file for tomcat
+vi /etc/systemd/system/tomcat.service
+Populate the file with:
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+[Service]
+Type=forking
+Environment=JAVA_HOME=/usr/lib/jvm/jre
+Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
+Environment=CATALINA_HOME=/opt/tomcat
+Environment=CATALINA_BASE=/opt/tomcat
+Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+ExecStart=/opt/tomcat/bin/startup.sh
+ExecStop=/bin/kill -15 $MAINPID
+User=tomcat
+Group=tomcat
+[Install]
+WantedBy=multi-user.target
+Install haveged
+sudo yum install haveged
+sudo systemctl start haveged.service
+sudo systemctl enable haveged.service
+Start and test tomcat
+sudo systemctl start tomcat.service
+sudo systemctl enable tomcat.service
+Add exception to firewall
+sudo firewall-cmd --zone=public --permanent --add-port=8080/tcp
+sudo firewall-cmd –reload
+Visit tomcat home by entering http://192.168.56.103:8080
