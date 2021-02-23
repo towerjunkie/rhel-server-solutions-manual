@@ -48,3 +48,16 @@ Add exception to firewall
 sudo firewall-cmd --zone=public --permanent --add-port=8080/tcp
 sudo firewall-cmd –reload
 Visit tomcat home by entering http://192.168.56.103:8080
+
+Configure the Apache Tomcat web management interface
+sudo vi /opt/tomcat/conf/tomcat-users.xml
+Within the </tomcat-users ...>...</tomcat-users> segment, insert a line to define a admin user:
+<user username="yourusername" password="yourpassword" roles="manager-gui,admin-gui"/>
+sudo systemctl restart tomcat.service
+To be able to access the manager page, go into the context.xml files and comment the valve classname
+<Context antiResourceLocking="false" privileged="true" >
+<!--
+<Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
+-->
+</Context>
+
