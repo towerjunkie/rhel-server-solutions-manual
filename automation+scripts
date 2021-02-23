@@ -1,0 +1,66 @@
+Cronjobs using Python
+
+crontab -e
+* * * * * /usr/bin/python3/home/(username)/python-job.py >> ~/cron.log 2>&1
+
+
+Scheduling Cron Jobs and creating HTML output table
+
+WEB_DIR=/var/www/html
+echo "<HTML>
+<HEAD>
+<style>
+.titulo{font-size: 1em; color: white; background:#0863CE; padding: 0.1em 0.2em;}
+table
+{
+border-collapse:collapse;
+}
+table, td, th
+{
+border:1px solid black;
+}
+</style>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+</HEAD>
+<BODY>" > $WEB_DIR/report.html
+HOST=$(hostname)
+echo "Filesystem usage for host <strong>$HOST</strong><br>
+Last updated: <strong>$(date)</strong><br><br>
+<table border='1'>
+<tr><th class='titulo'>Filesystem</td>
+<th class='titulo'>Size</td>
+<th class='titulo'>Use %</td>
+</tr>" >> $WEB_DIR/report.html
+while read line; do
+echo "<tr><td align='center'>" >> $WEB_DIR/report.html
+echo $line | awk '{print $1}' >> $WEB_DIR/report.html
+echo "</td><td align='center'>" >> $WEB_DIR/report.html
+echo $line | awk '{print $2}' >> $WEB_DIR/report.html
+echo "</td><td align='center'>" >> $WEB_DIR/report.html
+echo $line | awk '{print $5}' >> $WEB_DIR/report.html
+echo "</td></tr>" >> $WEB_DIR/report.html
+done < <(df -h | grep -vi filesystem)
+echo "</table></BODY></HTML>" >> $WEB_DIR/report.html
+
+
+System health script
+
+echo -e "\e[31;43m***** HOSTNAME INFORMATION *****\e[0m"
+hostnamectl
+echo ""
+echo -e "\e[31;43m***** FILE SYSTEM DISK SPACE USAGE *****\e[0m"
+df -h
+echo ""
+echo -e "\e[31;43m ***** FREE AND USED MEMORY *****\e[0m"
+free
+echo ""
+echo -e "\e[31;43m***** SYSTEM UPTIME AND LOAD *****\e[0m"
+uptime
+echo ""
+echo -e "\e[31;43m***** CURRENTLY LOGGED-IN USERS *****\e[0m"
+who
+echo ""
+echo -e "\e[31;43m***** TOP 5 MEMORY-CONSUMING PROCESSES *****\e[0m"
+ps -eo %mem,%cpu,comm --sort=-%mem | head -n 6
+echo ""
+echo -e "\e[1;32mDone.\e[0m"
